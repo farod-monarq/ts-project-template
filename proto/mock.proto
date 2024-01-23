@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package mock;
+
+import "google/protobuf/any.proto";  // Import the any.proto file
+
+// Definition of the Mock service
+service MockService {
+	rpc SimulateGameSession(GameSessionMock) returns (Task);
+	rpc StreamGameEvents(GameSessionMock) returns (stream GameEventResponse);
+
+}
+
+// Message representing a simulated game session
+message GameSessionMock {
+	string account_id = 1;
+	string machine_id = 2;
+	string in_game_iso = 3;
+	string balance_iso = 4;
+	int32 count = 5;
+	repeated GameActionItemTemplate template = 6;
+}
+
+// Message representing a template for a game action item
+message GameActionItemTemplate {
+	string action = 1;
+	double amount = 2;
+}
+
+// Message representing a game event
+message GameEvent {
+	string user_id = 1;
+	string currency = 2;
+	string game = 3;
+	string game_id = 4;
+	bool finished = 5;
+	repeated GameActionItem actions = 6;
+}
+
+// Message representing a game action item
+message GameActionItem {
+	string action = 1;
+	double amount = 2;
+	string action_id = 3;
+	string original_action_id = 4;
+	double jackpot_contribution = 5;
+	double jackpot_win = 6;
+	map<string, google.protobuf.Any> properties = 7;  // Using google.protobuf.Any
+}
+
+// Message representing an asynchronous task
+message Task {
+	string taskId = 1;
+	string taskName = 2;
+	string status = 3;
+	google.protobuf.Any result = 4;
+	string error = 5;
+}
+
+// Message representing the response for a game event in streaming
+message GameEventResponse {
+	double balance = 1;
+	string game_id = 2;
+	repeated TransactionItem transactions = 3;
+}
+
+// Message representing a transaction item
+message TransactionItem {
+	string action_id = 1;
+	string tx_id = 2;
+	string processed_at = 3;
+	double bonus_amount = 4;
+}

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package operator;
+
+import "google/protobuf/any.proto";  // Import the any.proto file
+
+// Message representing the request for a list of accounts
+message AccountListRequest {
+  int32 offset = 1;  // Offset for pagination
+  int32 limit = 2;   // Limit for pagination
+}
+
+// Definition of the Operator service
+service OperatorService {
+  // Method to get a list of accounts
+  rpc GetAccountList(AccountListRequest) returns (AccountListResponse);
+  
+  // Method to get a list of accounts in streaming
+  rpc StreamAccountList(AccountListRequest) returns (stream Account);
+}
+
+// Message representing a list of accounts
+message AccountListResponse {
+  repeated Account accounts = 1;
+}
+
+// Message representing an account
+message Account {
+  string id = 1;
+  string externalId = 2;
+  string cashierId = 3;
+  google.protobuf.Any info = 4;
+}
+
+// Message representing a balance
+message Balance {
+  string id = 1;
+  double value = 2;
+  string coin = 3;
+  string unit = 4;
+  string accountId = 5;
+}
+
+// Message representing a game account
+message GameAccount {
+  string id = 1;
+  string inGameCurrency = 2;
+  string balanceCurrency = 3;
+  string externalId = 4;
+  string balanceId = 5;
+  string accountId = 6;
+}
+
+// Message representing a game machine
+message GameMachine {
+  string id = 1;
+  string key = 2;
+  string externalId = 3;
+  string studio = 4;
+  google.protobuf.Any info = 5;
+  string providerId = 6;
+}
